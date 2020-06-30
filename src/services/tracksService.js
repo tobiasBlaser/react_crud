@@ -13,7 +13,7 @@ const updateTrack = async (id, data) => {
 };
 
 const deleteTrack = async (id) => {
-  return await request(`tarcks/${id}`, 'DELETE');
+  return await request(`tracks/${id}`, 'DELETE');
 };
 
 export { getTracks, createTrack, updateTrack, deleteTrack };

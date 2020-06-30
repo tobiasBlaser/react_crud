@@ -1,18 +1,27 @@
 import config from '../config';
 
-const getDefaultHeaders = () => ({
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*',
-  Authorization: `Bearer ${getToken()}`,
-});
+const getDefaultHeaders = (useAuth = true) => {
+  let headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
 
-const getToken = () => {
-  return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiYjk1NjU5NmUtODY0YS00ZWU1LTliOWYtYmY3MWE2NDI0NzJjIiwidXNlcm5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmEkMTAka2QxTkdsOE52YVBabDJIeDdEcHlSdTg2TUllLjIuTTNJekRDZ2g0YUdEcmEvbWtiQ25pblcifSwiaWF0IjoxNTkzMDg4NzU0LCJleHAiOjE1OTMxNzUxNTR9.9y2MHNAF_PR_Y2OKRajjxtZe009h6sXOIiwVBT__z1g';
+  if (useAuth) {
+    headers.Authorization = `Bearer ${getToken()}`;
+  }
+
+  return headers;
 };
 
-const request = async (url, method = 'get', payload = null, headers = {}) => {
-  const defaultHeaders = getDefaultHeaders();
+const getToken = () => {
+  const response = JSON.parse(window.localStorage.getItem('token'));
+  return response.value;
+};
+
+const request = async (url, method = 'GET', payload = null, headers = {}) => {
+  const defaultHeaders = await getDefaultHeaders(
+    !url.includes('login') && !url.includes('register') && !url.includes('user')
+  );
 
   const requestBody = {
     method: method,
@@ -22,12 +31,12 @@ const request = async (url, method = 'get', payload = null, headers = {}) => {
     },
   };
   if (payload) {
-    requestBody.body = payload;
+    requestBody.body = JSON.stringify(payload);
   }
 
-  return fetch(`${config.apiUrl}${url}`, requestBody).then((response) =>
-    response.json()
-  );
+  return fetch(`${config.apiUrl}${url}`, requestBody).then((response) => {
+    return response ? response.json() : false;
+  });
 };
 
 export { request };

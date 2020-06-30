@@ -1,11 +1,11 @@
 import React from 'react';
-import Tracks from './components/Tracks/Tracks';
+import AppRouter from './AppRouter';
 import './index.css';
 
 function App() {
   return (
     <div className="App">
-      <Tracks></Tracks>
+      <AppRouter></AppRouter>
     </div>
   );
 }

@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -16,4 +18,61 @@ h1 {
 h2,
 p {
   color: #333333;
+}
+
+.button {
+  border: none;
+  border-radius: 3px;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  max-height: 40px;
+  max-width: 160px;
+  cursor: pointer;
+  text-align: center;
+  min-width: 120px;
+  min-height: 30px;
+}
+
+.white-button {
+  background-color: #fff;
+  color: #333;
+}
+
+.white-button:hover {
+  background-color: #fffc;
+}
+
+.primary-button {
+  background-color: #1781e3;
+  margin-left: 10px;
+  color: #fff;
+}
+
+.primary-button:hover {
+  background-color: #1781e3cc;
+}
+
+.secondary-button {
+  background-color: #ddd;
+}
+
+.secondary-button:hover {
+  background-color: #dddc;
+}
+
+.white-text {
+  color: #fff;
+}
+
+input {
+  height: 40px;
+  width: 300px;
+  margin: 5px 0 10px 0;
+  border: 1px solid #333333;
+  border-radius: 3px;
+  background-color: #eee5;
+  padding: 5px;
+  font-size: 16px;
 }
