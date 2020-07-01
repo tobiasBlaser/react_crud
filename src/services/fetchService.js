@@ -15,7 +15,7 @@ const getDefaultHeaders = (useAuth = true) => {
 
 const getToken = () => {
   const response = JSON.parse(window.localStorage.getItem('token'));
-  return response.value;
+  return response ? response.value : '';
 };
 
 const request = async (url, method = 'GET', payload = null, headers = {}) => {
@@ -39,4 +39,4 @@ const request = async (url, method = 'GET', payload = null, headers = {}) => {
   });
 };
 
-export { request };
+export { request, getToken };

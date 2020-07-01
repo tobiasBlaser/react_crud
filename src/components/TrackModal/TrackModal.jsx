@@ -1,17 +1,38 @@
 import React, { useState } from 'react';
 import { createTrack } from '../../services/tracksService';
+import { validateTrack } from '../../services/validationService';
 import './TrackModal.css';
 
 const TrackModal = ({ toggleModal }) => {
   const [name, setName] = useState('');
   const [artist, setArtist] = useState('');
   const [length, setLength] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [artistError, setArtistError] = useState('');
+  const [lengthError, setLengthError] = useState('');
 
   const saveTrack = async () => {
-    const response = await createTrack({ name, artist, length });
-    if (response) {
-      toggleModal();
+    const validatedTrack = validate();
+    if (
+      !validatedTrack.NameError &&
+      !validatedTrack.ArtistError &&
+      !validatedTrack.lengthError
+    ) {
+      const response = await createTrack({ name, artist, length });
+      if (response.id) {
+        toggleModal();
+      }
     }
+  };
+
+  const validate = () => {
+    const validatedTrack = validateTrack(name, artist, length);
+
+    setNameError(validatedTrack.NameError);
+    setArtistError(validatedTrack.ArtistError);
+    setLengthError(validatedTrack.lengthError);
+
+    return validatedTrack;
   };
 
   return (
@@ -22,21 +43,27 @@ const TrackModal = ({ toggleModal }) => {
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-      ></input>
+      />
+      <p className="error">{nameError}</p>
+
       <label htmlFor="artist-input">Artist:</label>
       <input
         id="artist-input"
         type="text"
         value={artist}
         onChange={(e) => setArtist(e.target.value)}
-      ></input>
+      />
+      <p className="error">{artistError}</p>
+
       <label htmlFor="length-input">Length</label>
       <input
         id="length-input"
         type="number"
         value={length}
         onChange={(e) => setLength(e.target.value)}
-      ></input>
+      />
+      <p className="error">{lengthError}</p>
+
       <div className="button-container">
         <div className="secondary-button button" onClick={toggleModal}>
           Cancel

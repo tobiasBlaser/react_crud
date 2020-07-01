@@ -20,3 +20,9 @@
 .span-link:hover {
   color: #333c;
 }
+
+.error {
+  color: #d12;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
