@@ -17,12 +17,6 @@ const Login = () => {
 
   const toggleDisplayLogin = () => setDisplayLogin(!displayLogin);
 
-  const resetState = () => {
-    setUsername('');
-    setPassword('');
-    setConfirmPassword('');
-  };
-
   const reRoute = () => {
     if (getToken()) {
       history.push('tracks');
@@ -48,8 +42,7 @@ const Login = () => {
     ) {
       const response = await register({ username, password });
       if (response.id) {
-        resetState();
-        history.push('/tracks');
+        history.push('tracks');
       }
     }
   };
@@ -59,8 +52,7 @@ const Login = () => {
     if (!validatedUser.usernameError && !validatedUser.passwordError) {
       const response = await login({ username, password });
       if (response.id) {
-        resetState();
-        history.push('/tracks');
+        history.push('tracks');
       } else {
         setPasswordError('Credentials not correct');
       }

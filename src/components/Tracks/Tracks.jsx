@@ -13,12 +13,11 @@ const Tracks = () => {
   useEffect(() => {
     const getNewTracks = async () => {
       let response = await getTracks();
-      if (response) {
-        setTracks(response);
-      } else {
+      if (response.statusCode) {
         history.push('/');
+      } else {
+        setTracks(response);
       }
-      setTracks(response);
     };
     getNewTracks();
   }, [history, showModal]);
@@ -35,12 +34,22 @@ const Tracks = () => {
 
   const toggleCreate = () => setshowModal(!showModal);
 
+  const logout = () => {
+    window.localStorage.removeItem('token');
+    history.push('/');
+  };
+
   return (
     <div id="tracks-container">
       <div className="tracks-header">
         <h1>Your Tracks</h1>
-        <div onClick={toggleCreate} className="white-button button">
-          Create Track
+        <div className="button-container">
+          <div onClick={toggleCreate} className="white-button button">
+            Create Track
+          </div>
+          <div onClick={logout} className="white-button button">
+            Logout
+          </div>
         </div>
       </div>
       <div className="tracks-content">
