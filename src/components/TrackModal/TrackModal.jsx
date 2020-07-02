@@ -1,78 +1,93 @@
-import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import React from 'react';
 import { createTrack } from '../../services/tracksService';
-import { validateTrack } from '../../services/validationService';
 import './TrackModal.css';
 
-const TrackModal = ({ toggleModal }) => {
-  const [name, setName] = useState('');
-  const [artist, setArtist] = useState('');
-  const [length, setLength] = useState('');
-  const [nameError, setNameError] = useState('');
-  const [artistError, setArtistError] = useState('');
-  const [lengthError, setLengthError] = useState('');
+const validate = (values) => {
+  const errors = {};
 
-  const saveTrack = async () => {
-    const validatedTrack = validate();
-    if (
-      !validatedTrack.NameError &&
-      !validatedTrack.ArtistError &&
-      !validatedTrack.lengthError
-    ) {
-      const response = await createTrack({ name, artist, length });
-      if (response.id) {
-        toggleModal();
-      }
+  const array = [values.name, values.artist];
+  array.forEach((element, index) => {
+    const prefix = index === 0 ? 'Name' : 'Artist';
+    if (!element) {
+      errors[prefix.toLowerCase()] = prefix + ' field cannot be empty';
+    } else if (element.length > 50) {
+      errors[prefix.toLowerCase()] = prefix + ' cannot be more then 50 chars';
+    }
+  });
+
+  if (!values.trackLength || values.trackLength === 0) {
+    errors.trackLength = 'Length field cannot be empty or 0';
+  } else if (values.trackLength > 60) {
+    errors.trackLength = 'Length cannot be more then 1 hour';
+  }
+
+  return errors;
+};
+
+const TrackModal = ({ toggleModal }) => {
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      artist: '',
+      trackLength: '',
+    },
+    validate,
+    onSubmit: async (values) => {
+      await saveTrack(values);
+    },
+  });
+
+  const saveTrack = async (values) => {
+    const response = await createTrack({
+      name: values.name,
+      artist: values.artist,
+      length: values.trackLength,
+    });
+    if (response.id) {
+      toggleModal();
     }
   };
 
-  const validate = () => {
-    const validatedTrack = validateTrack(name, artist, length);
-
-    setNameError(validatedTrack.NameError);
-    setArtistError(validatedTrack.ArtistError);
-    setLengthError(validatedTrack.lengthError);
-
-    return validatedTrack;
-  };
-
   return (
-    <div className="create-track-container">
-      <label htmlFor="name-input">Name:</label>
+    <form className="create-track-container" onSubmit={formik.handleSubmit}>
+      <label htmlFor="name">Name:</label>
       <input
-        id="name-input"
+        id="name"
         type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={formik.values.name}
+        onChange={formik.handleChange}
       />
-      <p className="error">{nameError}</p>
+      <p className="error">{formik.errors.name}</p>
 
-      <label htmlFor="artist-input">Artist:</label>
+      <label htmlFor="artist">Artist:</label>
       <input
-        id="artist-input"
+        id="artist"
         type="text"
-        value={artist}
-        onChange={(e) => setArtist(e.target.value)}
+        value={formik.values.artist}
+        onChange={formik.handleChange}
       />
-      <p className="error">{artistError}</p>
+      <p className="error">{formik.errors.artist}</p>
 
-      <label htmlFor="length-input">Length</label>
+      <label htmlFor="trackLength">Track length</label>
       <input
-        id="length-input"
+        id="trackLength"
         type="number"
-        value={length}
-        onChange={(e) => setLength(e.target.value)}
+        step="0.01"
+        value={formik.values.trackLength}
+        onChange={formik.handleChange}
       />
-      <p className="error">{lengthError}</p>
+      <p className="error">{formik.errors.trackLength}</p>
 
       <div className="button-container">
         <div className="secondary-button button" onClick={toggleModal}>
           Cancel
         </div>
-        <div className="primary-button button" onClick={saveTrack}>
+        <button type="submit" className="primary-button button">
           Save
-        </div>
+        </button>
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -32,27 +32,27 @@ const validateUser = (username, password, confirmPassword) => {
   return response;
 };
 
-const validateTrack = (name, artist, length) => {
+const validateTrack = (name, artist, trackLength) => {
   let response = {};
 
   const array = [name, artist];
   array.forEach((element, index) => {
     const prefix = index === 0 ? 'Name' : 'Artist';
     if (!element) {
-      response[prefix + 'Error'] = prefix + ' field cannot be empty';
+      response[prefix.toLowerCase()] = prefix + ' field cannot be empty';
     } else if (element.length > 50) {
-      response[prefix + 'Error'] = prefix + ' cannot be more then 50 chars';
+      response[prefix.toLowerCase()] = prefix + ' cannot be more then 50 chars';
     } else {
-      response[prefix + 'Error'] = '';
+      response[prefix.toLowerCase()] = '';
     }
   });
 
-  if (!length || length === 0) {
-    response.lengthError = 'Length field cannot be empty or 0';
-  } else if (length > 60) {
-    response.lengthError = 'Length cannot be more then 1 hour';
+  if (!trackLength || trackLength === 0) {
+    response.trackLength = 'Length field cannot be empty or 0';
+  } else if (trackLength > 60) {
+    response.trackLength = 'Length cannot be more then 1 hour';
   } else {
-    response.lengthError = '';
+    response.trackLength = '';
   }
 
   return response;

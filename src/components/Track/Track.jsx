@@ -18,9 +18,9 @@ const Track = ({ track }) => {
   const validate = () => {
     const validatedTrack = validateTrack(name, artist, length);
 
-    setNameError(validatedTrack.NameError);
-    setArtistError(validatedTrack.ArtistError);
-    setLengthError(validatedTrack.lengthError);
+    setNameError(validatedTrack.name);
+    setArtistError(validatedTrack.artist);
+    setLengthError(validatedTrack.trackLength);
 
     return validatedTrack;
   };
@@ -28,9 +28,9 @@ const Track = ({ track }) => {
   const editTrack = async () => {
     const validatedTrack = validate();
     if (
-      !validatedTrack.NameError &&
-      !validatedTrack.ArtistError &&
-      !validatedTrack.lengthError
+      !validatedTrack.name &&
+      !validatedTrack.artist &&
+      !validatedTrack.trackLength
     ) {
       const response = await updateTrack(track.id, { name, artist, length });
       if (response.id) {
@@ -107,9 +107,9 @@ const Track = ({ track }) => {
           <div className="secondary-button button" onClick={toggleShowEdit}>
             Cancel
           </div>
-          <div onClick={editTrack} className="primary-button button">
+          <button onClick={editTrack} className="primary-button button">
             Save
-          </div>
+          </button>
         </div>
       </div>
     );
