@@ -1,19 +1,19 @@
 import { request } from './fetchService';
 
 const getTracks = async () => {
-  return await request('tracks', 'GET');
+  return request('tracks', 'GET');
 };
 
 const createTrack = async (data) => {
-  return await request('tracks', 'POST', data);
+  return request('tracks', 'POST', data);
 };
 
 const updateTrack = async (id, data) => {
-  return await request(`tracks/${id}`, 'PUT', data);
+  return request(`tracks/${id}`, 'PUT', data);
 };
 
 const deleteTrack = async (id) => {
-  return await request(`tracks/${id}`, 'DELETE');
+  return request(`tracks/${id}`, 'DELETE');
 };
 
 export { getTracks, createTrack, updateTrack, deleteTrack };

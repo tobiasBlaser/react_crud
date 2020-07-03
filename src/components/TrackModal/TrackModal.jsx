@@ -80,7 +80,11 @@ const TrackModal = ({ toggleModal }) => {
       <p className="error">{formik.errors.trackLength}</p>
 
       <div className="button-container">
-        <button onClick={toggleModal} className="secondary-button button">
+        <button
+          type="reset"
+          onClick={toggleModal}
+          className="secondary-button button"
+        >
           Cancel
         </button>
         <button type="submit" className="primary-button button">

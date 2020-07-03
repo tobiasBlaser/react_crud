@@ -32,7 +32,7 @@ const Track = ({ track }) => {
     initialValues: {
       name: '',
       artist: '',
-      length: '',
+      length: 0,
     },
     onSubmit: (values) => {
       editTrack(...values);
@@ -114,7 +114,11 @@ const Track = ({ track }) => {
         <p className="error">{formik.errors.trackLength}</p>
 
         <div className="button-container">
-          <button onClick={toggleShowEdit} className="white-button button">
+          <button
+            type="reset"
+            onClick={toggleShowEdit}
+            className="white-button button"
+          >
             Cancel
           </button>
           <button type="submit" className="primary-button button">
