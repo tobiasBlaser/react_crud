@@ -23,16 +23,11 @@ p {
 .button {
   border: none;
   border-radius: 3px;
-  padding: 20px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  max-height: 40px;
+  font-size: 16px;
   max-width: 160px;
   cursor: pointer;
-  text-align: center;
   min-width: 120px;
-  min-height: 30px;
+  height: 40px;
 }
 
 .white-button {
@@ -47,7 +42,6 @@ p {
 
 .primary-button {
   background-color: #1781e3;
-  font-size: 16px;
   margin-left: 10px;
   color: #fff;
 }

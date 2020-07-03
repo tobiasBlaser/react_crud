@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { login } from '../../services/authService';
+import { register } from '../../services/authService';
 
 const validate = (values) => {
   const passwordRegex = new RegExp(
@@ -21,24 +21,29 @@ const validate = (values) => {
       'Password must be 8+ digets, have a number, 1 upper- and lowercase char';
   }
 
+  if (values.confirmPassword && values.confirmPassword !== values.password) {
+    errors.confirmPassword = 'Confirm Password must be the same as password';
+  }
+
   return errors;
 };
 
-const Login = ({ toggleDisplayLogin }) => {
+const Register = ({ toggleDisplayLogin }) => {
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
+      confirmPassword: '',
     },
     onSubmit: async (values) => {
-      loginUser(values);
+      registerUser(values);
     },
     validate,
   });
 
-  const loginUser = async (values) => {
-    const response = await login({
+  const registerUser = async (values) => {
+    const response = await register({
       username: values.username,
       password: values.password,
     });
@@ -71,18 +76,29 @@ const Login = ({ toggleDisplayLogin }) => {
       />
       <p className="error">{formik.errors.password}</p>
 
+      <label htmlFor="confirmPassword" className="white-text">
+        Confirm password
+      </label>
+      <input
+        id="confirmPassword"
+        type="password"
+        value={formik.values.confirmPassword}
+        onChange={formik.handleChange}
+      />
+      <p className="error">{formik.errors.confirmPassword}</p>
+
       <button type="submit" className="button white-button">
-        Login
+        Register
       </button>
       <p className="white-text account-text">
-        Don't have an account yet?
+        Already have an account?
         <span className="span-link" onClick={toggleDisplayLogin}>
           {' '}
-          Register here
+          Login here
         </span>
       </p>
     </form>
   );
 };
 
-export default Login;
+export default Register;

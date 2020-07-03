@@ -1,42 +1,52 @@
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { delete_icon, edit_icon } from '../../assets/images/index';
 import { deleteTrack, updateTrack } from '../../services/tracksService';
-import { validateTrack } from '../../services/validationService';
 import './Track.css';
 
+const validate = (values) => {
+  const errors = {};
+
+  const strings = [values.name, values.artist];
+  strings.forEach((element, index) => {
+    const prefix = index === 0 ? 'Name' : 'Artist';
+    if (!element) {
+      errors[prefix.toLowerCase()] = prefix + ' field cannot be empty';
+    } else if (element.length > 50) {
+      errors[prefix.toLowerCase()] = prefix + ' cannot be more then 50 chars';
+    }
+  });
+
+  if (!values.trackLength || values.trackLength === 0) {
+    errors.trackLength = 'Length field cannot be empty or 0';
+  } else if (values.trackLength > 60) {
+    errors.trackLength = 'Length cannot be more then 1 hour';
+  }
+
+  return errors;
+};
+
 const Track = ({ track }) => {
-  const [name, setName] = useState(track.name);
-  const [artist, setArtist] = useState(track.artist);
-  const [length, setLength] = useState(track.length);
-  const [nameError, setNameError] = useState('');
-  const [artistError, setArtistError] = useState('');
-  const [lengthError, setLengthError] = useState('');
   const [showEdit, setShowEdit] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      artist: '',
+      length: '',
+    },
+    onSubmit: (values) => {
+      editTrack(...values);
+    },
+    validate,
+  });
 
   const toggleShowEdit = () => setShowEdit(!showEdit);
 
-  const validate = () => {
-    const validatedTrack = validateTrack(name, artist, length);
-
-    setNameError(validatedTrack.name);
-    setArtistError(validatedTrack.artist);
-    setLengthError(validatedTrack.trackLength);
-
-    return validatedTrack;
-  };
-
-  const editTrack = async () => {
-    const validatedTrack = validate();
-    if (
-      !validatedTrack.name &&
-      !validatedTrack.artist &&
-      !validatedTrack.trackLength
-    ) {
-      const response = await updateTrack(track.id, { name, artist, length });
-      if (response.id) {
-        toggleShowEdit();
-        window.location.reload();
-      }
+  const editTrack = async (name, artist, length) => {
+    const response = await updateTrack(track.id, { name, artist, length });
+    if (response.id) {
+      toggleShowEdit();
+      window.location.reload();
     }
   };
 
@@ -75,43 +85,43 @@ const Track = ({ track }) => {
 
   const renderEdit = () => {
     return (
-      <div id="track">
-        <label htmlFor="name-input">Name:</label>
+      <form id="track" onSubmit={formik.handleSubmit}>
+        <label htmlFor="name">Name:</label>
         <input
-          id="name-input"
+          id="name"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formik.values.name}
+          onChange={formik.handleChange}
         />
-        <p className="error">{nameError}</p>
+        <p className="error">{formik.errors.name}</p>
 
-        <label htmlFor="artist-input">Artist:</label>
+        <label htmlFor="artist">Artist:</label>
         <input
-          id="artist-input"
+          id="artist"
           type="text"
-          value={artist}
-          onChange={(e) => setArtist(e.target.value)}
+          value={formik.values.artist}
+          onChange={formik.handleChange}
         />
-        <p className="error">{artistError}</p>
+        <p className="error">{formik.errors.artist}</p>
 
-        <label htmlFor="length-input">Length</label>
+        <label htmlFor="trackLength">Length</label>
         <input
-          id="length-input"
+          id="trackLength"
           type="number"
-          value={length}
-          onChange={(e) => setLength(e.target.value)}
+          value={formik.values.trackLength}
+          onChange={formik.handleChange}
         />
-        <p className="error">{lengthError}</p>
+        <p className="error">{formik.errors.trackLength}</p>
 
         <div className="button-container">
-          <div className="secondary-button button" onClick={toggleShowEdit}>
+          <button onClick={toggleShowEdit} className="white-button button">
             Cancel
-          </div>
-          <button onClick={editTrack} className="primary-button button">
+          </button>
+          <button type="submit" className="primary-button button">
             Save
           </button>
         </div>
-      </div>
+      </form>
     );
   };
 

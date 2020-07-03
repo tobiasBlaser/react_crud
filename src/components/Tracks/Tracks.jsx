@@ -44,12 +44,12 @@ const Tracks = () => {
       <div className="tracks-header">
         <h1>Your Tracks</h1>
         <div className="button-container">
-          <div onClick={toggleCreate} className="white-button button">
+          <button onClick={toggleCreate} className="white-button button">
             Create Track
-          </div>
-          <div onClick={logout} className="white-button button">
+          </button>
+          <button onClick={logout} className="white-button button">
             Logout
-          </div>
+          </button>
         </div>
       </div>
       <div className="tracks-content">

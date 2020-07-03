@@ -1,0 +1,28 @@
+#login-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.account-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.span-link {
+  color: #333;
+  cursor: pointer;
+}
+
+.span-link:hover {
+  color: #333c;
+}
+
+.error {
+  color: #d12;
+  margin-bottom: 10px;
+  font-size: 14px;
+}

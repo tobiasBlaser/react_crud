@@ -6,8 +6,8 @@ import './TrackModal.css';
 const validate = (values) => {
   const errors = {};
 
-  const array = [values.name, values.artist];
-  array.forEach((element, index) => {
+  const strings = [values.name, values.artist];
+  strings.forEach((element, index) => {
     const prefix = index === 0 ? 'Name' : 'Artist';
     if (!element) {
       errors[prefix.toLowerCase()] = prefix + ' field cannot be empty';
@@ -80,9 +80,9 @@ const TrackModal = ({ toggleModal }) => {
       <p className="error">{formik.errors.trackLength}</p>
 
       <div className="button-container">
-        <div className="secondary-button button" onClick={toggleModal}>
+        <button onClick={toggleModal} className="secondary-button button">
           Cancel
-        </div>
+        </button>
         <button type="submit" className="primary-button button">
           Save
         </button>

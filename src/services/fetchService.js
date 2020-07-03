@@ -20,7 +20,7 @@ const getToken = () => {
 
 const request = async (url, method = 'GET', payload = null, headers = {}) => {
   const defaultHeaders = await getDefaultHeaders(
-    !url.includes('login') && !url.includes('register') && !url.includes('user')
+    !url.includes('login') && !url.includes('register')
   );
 
   const requestBody = {
